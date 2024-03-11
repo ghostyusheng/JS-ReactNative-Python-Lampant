@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+    <title>Index</title>
+</head>     
+<body>
+    <h1 id="title">version2</h1>
+
+    <input type="text" id="searchBox" name="searchBox" oninput="search()"><br><br>
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temperture Range</th>
+                <th>Wind Direction</th>
+                <th>Icon</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+<script>
+function search() {
+    i = document.getElementById('searchBox');
+    $.get("/proxy/city/search?q="+i.value,function(data,status){
+        let stack = [];
+        for (let i = 0; i < data.data.detail.daily.length; i++) {
+            let n = data.data.detail.daily[i];
+            let dt = formatTime(n.dt);
+            let wind_direction = degToCompass(n.wind_deg);
+            let img = `https://openweathermap.org/img/wn/${n.weather[0].icon}@2x.png`
+            stack.push([
+                dt,
+                `${n.temp.min}℃ ~ ${n.temp.max}℃`,
+                wind_direction,
+                img
+            ]);
+        }
+        console.log(stack);
+        $('#myTable').DataTable().destroy()
+        $('#myTable').DataTable({
+            "columnDefs": [
+                {
+                    "render": function ( data, type, row ) {
+                        return `<img height=50 src="${data}" />`;
+                    },
+                    "targets": 3
+                },
+            ],
+            data:stack,
+        })
+        let t = data.data.basic;
+        $('#title')[0].innerText = `${t.country} ${t.state} ${t.name}`;
+    });
+    console.log(i.value)
+}
+
+var data = [
+    [
+        "",
+        "",
+        "",
+        "",
+    ],
+]
+
+function degToCompass(num) {
+    var val = Math.floor((num / 22.5) + 0.5);
+    var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    return arr[(val % 16)];
+}
+
+function formatTime(timestamp) {
+   var date = new Date(timestamp * 1000);
+   var year = date.getFullYear();
+   var month = ('0' + (date.getMonth() + 1)).slice(-2);
+   var day = ('0' + date.getDate()).slice(-2);
+
+   return (year + '-' + month + '-' + day);
+}
+
+$(document).ready(function () {
+    $('#myTable').DataTable({data:data});
+});
+
+</script>
+</body>
+</html>
+
