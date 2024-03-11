@@ -1,43 +1,15 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Alert, StyleSheet, Text, View, Image, Button } from 'react-native';
+import { Alert, StyleSheet, Text, View, Image, Button, TextInput, SafeAreaView } from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
+
 const HomeScreen = ({navigation}) => {
   return (
-    <Button
-      title="Go to Jane's profile"
-      onPress={() =>
-        navigation.navigate('Profile', {name: 'Jane'})
-      }
-    />
-  );
-};
-const ProfileScreen = ({navigation, route}) => {
-  return <Text>This is {route.params.name}'s profile</Text>;
-};
-
-const MyStack = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{title: 'Welcome'}}
-        />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-export default function App() {
-  return (
     <View style={styles.container}>
-      <MyStack></MyStack>
       <View style={styles.header}>
         <Image
             style={styles.logo}
@@ -56,7 +28,7 @@ export default function App() {
             />
             <Button
               title="Add Ideas"
-              onPress={() => Alert.alert('Left button pressed')}
+              onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
             />
           </View>
           <View style={styles.idea}>
@@ -71,6 +43,56 @@ export default function App() {
         </View>
       <StatusBar style="auto" />
     </View>
+  );
+};
+const AddIdea= ({navigation, route}) => {
+  const [text1, onChangeTitle] = React.useState('');
+  const [text2, onChangeContent] = React.useState('');
+
+  console.log(text1, text2)
+
+  return (
+    <View>
+      <SafeAreaView>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeTitle}
+          value={text1}
+          placeholder="Idea Title"
+        />
+        <TextInput
+          style={styles.input2}
+          onChangeText={onChangeContent}
+          value={text2}
+          placeholder="Idea Content"
+        />
+        <Button
+          title="submit"
+          onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
+        />
+      </SafeAreaView>
+    </View>
+  )
+};
+
+const MyStack = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{title: 'Home'}}
+        />
+        <Stack.Screen options={{title: 'Add New Idea'}} name="Profile" component={AddIdea} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default function App() {
+  return (
+    <MyStack></MyStack>
   );
 }
 
@@ -108,6 +130,18 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     borderWidth: '3',
     height: '100%',
-    paddingTop: 15
+    paddingTop: 10
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  input2: {
+    height: 120,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
 });
