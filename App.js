@@ -37,7 +37,7 @@ const HomeScreen = ({navigation}) => {
             />
             <Button
               title="List Ideas"
-              onPress={() => Alert.alert('Left button pressed')}
+              onPress={() => navigation.navigate('ListIdea', {name: 'Jane'})}
             />
           </View>
         </View>
@@ -75,6 +75,27 @@ const AddIdea= ({navigation, route}) => {
   )
 };
 
+const ListIdea = ({navigation, route}) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Image
+              style={styles.client}
+              source={require('./assets/client.jpg')}
+          />
+        </View>
+        <View>
+          <Text style={styles.cardTitle}>content</Text>
+        </View>
+        <View>
+          <Text style={styles.cardContent}>content</Text>
+        </View>
+      </View>
+    </View>
+  )
+}
+
 const MyStack = () => {
   return (
     <NavigationContainer>
@@ -85,6 +106,7 @@ const MyStack = () => {
           options={{title: 'Home'}}
         />
         <Stack.Screen options={{title: 'Add New Idea'}} name="Profile" component={AddIdea} />
+        <Stack.Screen options={{title: 'List Idea'}} name="ListIdea" component={ListIdea} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -144,4 +166,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  card: {
+    borderWidth: 1,
+    margin: 8,
+    borderRadius: 10
+  },
+  cardHeader: {
+    borderWidth: 3,
+    width: '100%',
+    alignItems: 'flex-end'
+  },
+  cardTitle: {
+    fontSize: 30,
+    fontWeight: 200
+  },
+  cardContent: {
+    fontSize: 20,
+    fontWeight: 200
+  }
 });
