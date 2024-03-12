@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Alert, StyleSheet, Text, View, Image, Button, TextInput, SafeAreaView } from 'react-native';
+import { FlatList, Alert, StyleSheet, Text, View, Image, Button, TextInput, SafeAreaView } from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -85,6 +85,11 @@ const AddIdea= async ({navigation, route}) => {
     </View>
   )
 };
+
+const renderItem = ({item}) => {
+  return <Text>{item[1]}</Text>
+}
+
 const ListIdea = ({navigation, route}) => {
   const [data, setData] = React.useState([]);
   const getList = async () => {
@@ -103,28 +108,38 @@ const ListIdea = ({navigation, route}) => {
   React.useEffect(() => {
     getList();
   }, []);
-  console.log(data)
+  if (data && data.data) {
+    console.log('==>', data.data)
+  }
   return (
     <View style={styles.container}>
-      {data && data.data && data.data.map(function (x, i) {
-        console.log(x, i)
-        return (
-        <View style={styles.card} key={i}>
-          <View style={styles.cardHeader}>
-            <Image
-                style={styles.client}
-                source={require('./assets/client.jpg')}
-            />
-          </View>
-          <View>
-            <Text style={styles.cardTitle}>{x[1]}</Text>
-          </View>
-          <View>
-            <Text style={styles.cardContent}>{x[2]}</Text>
-          </View>
-        </View>
-        )
-      })}
+      {
+       data && data.data ? <FlatList
+        data={data.data}
+        renderItem={renderItem}
+        keyExtractor={item => item[0]}
+      /> : <></>
+      }
+      {//data && data.data && data.data.map(function (x, i) {
+        //console.log(x, i)
+        //return (
+        //<View style={styles.card} key={i}>
+        //  <View style={styles.cardHeader}>
+        //    <Image
+        //        style={styles.client}
+        //        source={require('./assets/client.jpg')}
+        //    />
+        //  </View>
+        //  <View>
+        //    <Text style={styles.cardTitle}>{x[1]}</Text>
+        //  </View>
+        //  <View>
+        //    <Text style={styles.cardContent}>{x[2]}</Text>
+        //  </View>
+        //</View>
+        //)
+      //})
+      }
     </View>
   )
 }
