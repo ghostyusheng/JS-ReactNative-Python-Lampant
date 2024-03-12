@@ -86,17 +86,27 @@ const AddIdea= ({navigation, route}) => {
   )
 };
 
+const avt = {
+  0 : require('./assets/avt0.jpg'),
+  1 : require('./assets/avt1.jpg'),
+  2 : require('./assets/avt2.jpg'),
+  3 : require('./assets/avt3.jpg'),
+  4 : require('./assets/avt4.jpg'),
+  5 : require('./assets/avt5.jpg'),
+}
+
 const renderItem = ({item}) => {
   const colors = ["rgb(239 68 68)", "rgb(34 197 95)", 
     "rgb(59 130 246)", "rgb(169 85 247)", "rgb(4 182 213)", 
     "rgb(234 179 11)", "rgb(107 114 128)"]
   const color = colors[Math.round(Math.random()*10)%colors.length]
+  const avtNum= Math.round(Math.random()*10)%6
   return (
   <View style={styles.card} backgroundColor={color}>
     <View style={styles.cardHeader}>
       <Image
           style={styles.client}
-          source={require('./assets/client.jpg')}
+          source={avt[avtNum]}
       />
     </View>
     <View>
@@ -212,7 +222,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   card: {
-    margin: 15,
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
     borderRadius: 10,
     height: 190,
     padding: 10
