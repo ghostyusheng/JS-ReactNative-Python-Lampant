@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     marginTop: '40%',
   },
   header: {
-    height: 80,
+    height: 70,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgb(239 242 255)',
     borderColor: 'red',
     height: '100%',
     paddingTop: 10
