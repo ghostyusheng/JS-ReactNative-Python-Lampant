@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}) => {
     </View>
   );
 };
-const AddIdea= ({navigation, route}) => {
+const AddIdea= async ({navigation, route}) => {
   const [text1, onChangeTitle] = React.useState('');
   const [text2, onChangeContent] = React.useState('');
 
@@ -85,24 +85,46 @@ const AddIdea= ({navigation, route}) => {
     </View>
   )
 };
-
 const ListIdea = ({navigation, route}) => {
+  const [data, setData] = React.useState([]);
+  const getList = async () => {
+    try {
+      const response = await fetch(
+        'http://127.0.0.1:5005/list',
+      );
+      const json = await response.json();
+      print(json)
+      setData(json)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getList();
+  }, []);
+  console.log(data)
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Image
-              style={styles.client}
-              source={require('./assets/client.jpg')}
-          />
+      {data && data.data && data.data.map(function (x, i) {
+        console.log(x, i)
+        return (
+        <View style={styles.card} key={i}>
+          <View style={styles.cardHeader}>
+            <Image
+                style={styles.client}
+                source={require('./assets/client.jpg')}
+            />
+          </View>
+          <View>
+            <Text style={styles.cardTitle}>{x[1]}</Text>
+          </View>
+          <View>
+            <Text style={styles.cardContent}>{x[2]}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.cardTitle}>content</Text>
-        </View>
-        <View>
-          <Text style={styles.cardContent}>content</Text>
-        </View>
-      </View>
+        )
+      })}
     </View>
   )
 }
@@ -188,11 +210,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   cardTitle: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 200
   },
   cardContent: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 200
   }
 });
