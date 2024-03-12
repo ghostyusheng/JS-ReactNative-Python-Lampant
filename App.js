@@ -49,7 +49,18 @@ const AddIdea= ({navigation, route}) => {
   const [text1, onChangeTitle] = React.useState('');
   const [text2, onChangeContent] = React.useState('');
 
-  console.log(text1, text2)
+  const submitForm = async () => {
+    console.log(text1, text2)
+    try {
+      const response = await fetch(`http://127.0.0.1:5005/add?title=${text1}&content=${text2}`, {
+        method: 'GET',
+      });
+      const json = await response.json();
+      Alert.alert('SUCCESS')
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <View>
@@ -68,7 +79,7 @@ const AddIdea= ({navigation, route}) => {
         />
         <Button
           title="submit"
-          onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
+          onPress={submitForm}
         />
       </SafeAreaView>
     </View>
