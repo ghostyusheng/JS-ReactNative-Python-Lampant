@@ -28,7 +28,7 @@ const HomeScreen = ({navigation}) => {
             />
             <Button
               title="Add Ideas"
-              onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
+              onPress={() => navigation.navigate('AddIdea', {name: 'Jane'})}
             />
           </View>
           <View style={styles.idea}>
@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}) => {
     </View>
   );
 };
-const AddIdea= async ({navigation, route}) => {
+const AddIdea= ({navigation, route}) => {
   const [text1, onChangeTitle] = React.useState('');
   const [text2, onChangeContent] = React.useState('');
 
@@ -87,7 +87,26 @@ const AddIdea= async ({navigation, route}) => {
 };
 
 const renderItem = ({item}) => {
-  return <Text>{item[1]}</Text>
+  const colors = ["rgb(239 68 68)", "rgb(34 197 95)", 
+    "rgb(59 130 246)", "rgb(169 85 247)", "rgb(4 182 213)", 
+    "rgb(234 179 11)", "rgb(107 114 128)"]
+  const color = colors[Math.round(Math.random()*10)%colors.length]
+  return (
+  <View style={styles.card} backgroundColor={color}>
+    <View style={styles.cardHeader}>
+      <Image
+          style={styles.client}
+          source={require('./assets/client.jpg')}
+      />
+    </View>
+    <View>
+      <Text style={styles.cardTitle}>{item[1]}</Text>
+    </View>
+    <View>
+      <Text style={styles.cardContent}>{item[2]}</Text>
+    </View>
+  </View>
+  )
 }
 
 const ListIdea = ({navigation, route}) => {
@@ -118,27 +137,7 @@ const ListIdea = ({navigation, route}) => {
         data={data.data}
         renderItem={renderItem}
         keyExtractor={item => item[0]}
-      /> : <></>
-      }
-      {//data && data.data && data.data.map(function (x, i) {
-        //console.log(x, i)
-        //return (
-        //<View style={styles.card} key={i}>
-        //  <View style={styles.cardHeader}>
-        //    <Image
-        //        style={styles.client}
-        //        source={require('./assets/client.jpg')}
-        //    />
-        //  </View>
-        //  <View>
-        //    <Text style={styles.cardTitle}>{x[1]}</Text>
-        //  </View>
-        //  <View>
-        //    <Text style={styles.cardContent}>{x[2]}</Text>
-        //  </View>
-        //</View>
-        //)
-      //})
+       /> : <></>
       }
     </View>
   )
@@ -153,7 +152,7 @@ const MyStack = () => {
           component={HomeScreen}
           options={{title: 'Home'}}
         />
-        <Stack.Screen options={{title: 'Add New Idea'}} name="Profile" component={AddIdea} />
+        <Stack.Screen options={{title: 'Add New Idea'}} name="AddIdea" component={AddIdea} />
         <Stack.Screen options={{title: 'List Idea'}} name="ListIdea" component={ListIdea} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -191,14 +190,12 @@ const styles = StyleSheet.create({
   client: {
     width: 50,
     height: 50,
-    borderWidth: 5,
     borderRadius: 50,
     marginRight: 5
   },
   container: {
     backgroundColor: '#fff',
     borderColor: 'red',
-    borderWidth: '3',
     height: '100%',
     paddingTop: 10
   },
@@ -215,21 +212,21 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   card: {
-    borderWidth: 1,
-    margin: 8,
-    borderRadius: 10
+    margin: 15,
+    borderRadius: 10,
+    height: 190,
+    padding: 10
   },
   cardHeader: {
-    borderWidth: 3,
     width: '100%',
     alignItems: 'flex-end'
   },
   cardTitle: {
     fontSize: 20,
-    fontWeight: 200
+    fontWeight: 500,
+    marginBottom: 5
   },
   cardContent: {
     fontSize: 15,
-    fontWeight: 200
   }
 });
